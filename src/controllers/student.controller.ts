@@ -1,9 +1,10 @@
+import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
 
-import { studentRegisterSchema } from '../schemas/student.schema';
+import { studentRegisterSchema, studentUpdateSchema } from '../schemas/student.schema';
 import { StudentService } from '../services/student.service';
 import { AuthRequest } from '../middlewares/authMiddleware';
-import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -41,5 +42,37 @@ export const getStudentData = async (req: AuthRequest, res: Response) => {
     return res.json(student);
   } catch (err) {
     return res.status(500).json({ error: 'Erro ao buscar estudante.' });
+  }
+};
+
+export const updateStudentData = async (req: AuthRequest, res: Response) => {
+  try {
+    const data = studentUpdateSchema.parse(req.body);
+
+    const updateData: any = { ...data };
+
+    if (data.senha) {
+      const hashed = await bcrypt.hash(data.senha, 10);
+      updateData.senha = hashed;
+    }
+
+    const updatedStudent = await prisma.estudante.update({
+      where: { id: req.user!.id },
+      data: updateData,
+      select: {
+        id: true,
+        nome: true,
+        sobrenome: true,
+        email: true,
+      },
+    });
+
+    return res.json(updatedStudent);
+  } catch (err: any) {
+    if (err.name === 'ZodError') {
+      return res.status(400).json({ error: err.errors });
+    }
+
+    return res.status(500).json({ error: 'Erro ao atualizar estudante.' });
   }
 };
