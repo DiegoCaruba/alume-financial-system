@@ -1,0 +1,185 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Alume API",
+      "version": "1.0.0",
+      "description": "API de financiamento estudantil"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000/api"
+      }
+    ],
+    "components": {
+      "securitySchemes": {
+          "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    },
+    "paths": {
+      "/register": {
+        "post": {
+          "summary": "Registrar novo estudante",
+          "tags": ["Estudantes"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nome": { "type": "string" },
+                    "sobrenome": { "type": "string" },
+                    "email": { "type": "string" },
+                    "senha": { "type": "string" }
+                  },
+                  "required": ["nome", "sobrenome", "email", "senha"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Estudante registrado com sucesso"
+            }
+          }
+        }
+      },
+      "/login": {
+        "post": {
+          "summary": "Autenticação de usuário registrado",
+          "tags": ["Estudantes"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": { "type": "string" },
+                    "senha": { "type": "string" }
+                  },
+                  "required": ["email", "senha"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Autenticação realizada com sucesso"
+            },
+            "404": {
+              "description": "Erro de autenticação"
+            }
+          }
+        }
+      },
+      "/me": {
+        "post": {
+          "summary": "Retorna dados do usuário autenticado",
+          "tags": ["Estudantes"],
+          "security": [
+            {
+                "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Dados do usuário retornados com sucesso"
+            },
+            "500": {
+              "description": "Erro ao buscar dados no base"
+            }
+          }
+        },
+        "put": {
+          "summary": "Atualiza dados do usuário",
+          "tags": ["Estudantes"],
+          "security": [
+            {
+                "bearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "nome": { "type": "string" },
+                    "sobrenome": { "type": "string" },
+                    "senha": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Usuário atualizado com sucesso."
+            },
+            "404": {
+              "description": "Erro ao atualizar dados do usuário."
+            }
+          }
+        }
+      },
+      "/simulations": {
+        "post": {
+          "summary": "Realiza simulação de crédito",
+          "tags": ["Simulações"],
+          "security": [
+            {
+                "bearerAuth": []
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "valor_total": { "type": "number" },
+                    "quantidade_parcelas": { "type": "integer" },
+                    "juros_ao_mes": { "type": "number" }
+                  },
+                  "required": ["valor_total", "quantidade_parcelas", "juros_ao_mes"]
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Simulação criada com sucesso"
+            },
+            "500": {
+              "description": "Erro ao criar a simulação de crédito"
+            }
+          }
+        },
+        "get": {
+          "summary": "Retorna todas simulações realizadas pelo usuário",
+          "tags": ["Simulações"],
+          "security": [
+            {
+                "bearerAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso em obter as simulações."
+            },
+            "500": {
+              "description": "Erro ao obter as simulações do usuário."
+            }
+          }
+        }
+      }
+    }
+  }
+  

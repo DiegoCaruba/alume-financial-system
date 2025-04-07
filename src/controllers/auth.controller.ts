@@ -26,8 +26,7 @@ export const login = async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: student.id, email: student.email },
       process.env.JWT_SECRET!,
-      { expiresIn: '120m' }
-    //   { expiresIn: '5m' }
+      { expiresIn: '5m' }
     );
 
     return res.json({
@@ -44,6 +43,6 @@ export const login = async (req: Request, res: Response) => {
       return res.status(400).json({ error: err.errors });
     }
 
-    return res.status(500).json({ error: 'Error during authentication.' });
+    return res.status(404).json({ error: 'Error during authentication.' });
   }
 };

@@ -41,7 +41,7 @@ export const getStudentData = async (req: AuthRequest, res: Response) => {
 
     return res.json(student);
   } catch (err) {
-    return res.status(500).json({ error: 'Student data was not found.' });
+    return res.status(500).json({ error: 'Internal server error.' });
   }
 };
 
