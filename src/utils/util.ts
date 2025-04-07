@@ -1,4 +1,4 @@
-function calculateMonthlyInstallment(value: number, rate: number, installment: number): number {
+export function calculateMonthlyInstallment(value: number, rate: number, installment: number): number {
   const i = rate;
   const n = installment;
 

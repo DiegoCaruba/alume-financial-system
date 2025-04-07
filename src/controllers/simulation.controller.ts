@@ -1,19 +1,11 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 
 import { createSimulationSchema } from '../schemas/simulation.schema';
 import { AuthRequest } from '../middlewares/authMiddleware';
-// import { calculateMonthlyInstallment } from '../utils/util';
+import { calculateMonthlyInstallment } from '../utils/util';
 
 const prisma = new PrismaClient();
-
-function calculateMonthlyInstallment(value: number, rate: number, installment: number): number {
-  const i = rate;
-  const n = installment;
-
-  const pmt = value * (i / (1 - Math.pow(1 + i, -n)));
-  return parseFloat(pmt.toFixed(2));
-}
 
 export const createSimulation = async (req: AuthRequest, res: Response) => {
   try {
@@ -43,5 +35,24 @@ export const createSimulation = async (req: AuthRequest, res: Response) => {
     }
 
     return res.status(500).json({ error: 'Error during simulation creation.' });
+  }
+};
+
+export const getAllSimulations = async (req: AuthRequest, res: Response) => {
+  try {
+    const simulations = await prisma.simulacao.findMany({
+      where: { estudanteId: req.user!.id },
+      select: {
+        estudanteId: true,
+        valor_total: true,
+        quantidade_parcelas: true,
+        juros_ao_mes: true,
+        valor_parcela_mensal: true,
+      },
+    });
+
+    return res.json(simulations);
+  } catch (err) {
+    return res.status(500).json({ error: 'Error during fetch simulations' });
   }
 };

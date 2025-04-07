@@ -1,5 +1,6 @@
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import { PrismaClient } from '@prisma/client';
+
 import { StudentRegisterDTO } from '../schemas/student.schema';
 
 const prisma = new PrismaClient();

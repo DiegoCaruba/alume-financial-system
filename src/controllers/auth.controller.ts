@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
-import { loginSchema } from '../schemas/auth.schema';
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { PrismaClient } from '@prisma/client';
+import { Request, Response } from 'express';
+
+import { loginSchema } from '../schemas/auth.schema';
 
 const prisma = new PrismaClient();
 
