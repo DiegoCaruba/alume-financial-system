@@ -1,76 +1,89 @@
-# :test_tube: Teste Prático Backend Pleno — Alume
-Este repositório contém o desafio técnico para a vaga de **Desenvolvedor(a) Backend Pleno**, com foco em **Node.js + TypeScript**, utilizando boas práticas de arquitetura e segurança. A proposta é simular funcionalidades que façam parte de um sistema de **financiamentos estudantis para estudantes de medicina**.
+# Alume - Sistema de Financiamento Estudantil
+
+Este projeto é uma RESTful API desenvolvida com Node.js + TypeScript para simular um sistema de financiamento estudantil para estudantes de medicina.
+
+## 🚀 Tecnologias
+
+- Node.js + TypeScript
+- Express
+- Prisma (ORM)
+- PostgreSQL (via Docker)
+- JWT para autenticação
+- Zod para validação
+- Swagger para documentação da API
+
 ---
-## :brain: Contexto
-Nossa startup trabalha conectando **estudantes de medicina** a **financiamentos estudantis personalizados**. Este teste simula parte de um módulo interno que permite que estudantes se cadastrem e simulem financiamentos.
-Você deverá desenvolver uma **RESTful API**, com autenticação via **JWT**, onde estudantes podem:
-- Se registrar
-- Realizar login
-- Consultar e editar seus dados
-- Simular novos financiamentos baseados em parâmetros específicos
+
+## 📦 Pré-requisitos
+
+- [Node.js](https://nodejs.org/)
+- [Docker + Docker Compose](https://www.docker.com/)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
+
 ---
-## :package: Requisitos Técnicos
-- **Node.js com TypeScript**
-- ORM (Ex: Prisma, TypeORM ou Sequelize)
-- Banco de dados relacional com docker-compose (preferencialmente PostgreSQL ou MySQL)
-- Autenticação via **JWT** com expiração de 5 minutos
-- Arquitetura modular e boas práticas (controllers, services, middlewares, etc.)
-- Validação de dados (com libs como `zod`, `joi` ou similares)
-- Tratamento de erros
+## ⚙️ Instalação
+
+### 1. Clone o repositório
+
+```bash
+https://github.com/DiegoCaruba/alume-financial-system.git
+```
+
+### 2. Instalação de Dependências
+
+```bash
+npm install
+# ou
+yarn install
+```
+### 3. Crie um arquivo .env baseado no .env.example
+
+- Verifique se o .env está configurado com as mesmas credenciais do docker-compose.yml. Exemplo:
+
+```ini
+DATABASE_URL="postgresql://user:password@localhost:5432/alume"
+JWT_SECRET="suaChaveSecretaJWT"
+```
+
 ---
-## :standing_person: Entidades
-### Estudantes
-- `id`: primary key
-- `nome`: obrigatório
-- `sobrenome`: obrigatório
-- `email`: obrigatório e único
-- `senha`: obrigatória (criptografada)
-### Simulações de Financiamento
-- `id`: primary key
-- `id_estudante`: obrigatório
-- `valor_total`: obrigatório
-- `quantidade_parcelas`: obrigatório
-- `juros_ao_mes`: obrigatório
-- `valor_parcela_mensal`: calculado
+## 🐘 Banco de Dados (Docker + PostgreSQL)
+
+### 4. Suba o container com PostgreSQL
+
+```bash
+docker-compose up -d
+```
+
 ---
-## :closed_lock_with_key: Autenticação
-- JWT com expiração de **5 minutos**.
+## 🧩 Prisma
+
+### 5. Inicialize o banco de dados com Prisma
+
+```bash
+npx prisma migrate dev --name init
+```
+
 ---
-## Rotas Obrigatórias
-### Estudantes
-- `POST /api/register` — Criação de novo estudante
-- `POST /api/login` — Autenticação
-- `POST /api/me` — Retorna dados do estudante autenticado (sem senha)
-- `PUT /api/me` — Atualiza dados do estudante autenticado
-### Simulações de Financiamento (Requer autenticação)
-- `POST /api/simulations` — Cria uma nova simulação (retorna valor estimado da parcela com base nos dados informados)
-- `GET /api/simulations` — Lista todas as simulações realizadas pelo estudante
+## 🚀 Iniciar a aplicação
+
+### 6. Rodar a aplicação em modo desenvolvimento
+
+```bash
+npm run dev
+# ou
+yarn dev
+```
+
 ---
-## :brain: Regras de Negócio
-- Um estudante só pode visualizar, editar ou excluir suas próprias simulações.
-- O campo `valor_parcela_mensal` da simulação deve ser calculado com base na fórmula de juros compostos abaixo.
----
-## :abacus: Fórmula de cálculo da parcela
-Para simular o valor mensal do financiamento, use a fórmula da **parcela fixa (Price)**:
-PMT = PV * (i / (1 - (1 + i)^-n))
-Onde:
-- `PMT` = parcela mensal
-- `PV` = valor total do financiamento
-- `i` = juros ao mês (ex: 0.02 para 2%)
-- `n` = número de parcelas
----
-## :mailbox_with_mail: Entrega
-- Suba o projeto em um repositório público no seu GitHub
-- Envie o link do repositório e instruções de execução no README
-- Se desejar, escreva testes automatizados para algumas rotas
-- Use `.env.example` para variáveis sensíveis
----
-## :white_check_mark: Dicas
-- Use `bcrypt` ou `argon2` para criptografar senhas
-- Use `jsonwebtoken` para JWT
-- Organize o projeto em camadas (controllers, services, etc)
-- Utilize boas práticas de REST e clean code
-- Se quiser ir além: adicione testes, Swagger, ou documentação via Postman
----
-Você pode enviar o link para o seu repositório para developers@alume.com. Caso tenha dúvidas sobre algum aspecto do teste você pode enviá-las para o mesmo e-mail.
-Boa sorte e bom código! :rocket:
+## 📘 Documentação da API (Swagger)
+
+Após iniciar o servidor, acesse:
+
+```bash
+http://localhost:3000/api-docs
+```
+
+Lá você poderá:
+- Ver todas as rotas disponíveis
+- Testar as requisições
+- Inserir um Bearer Token no botão "Authorize 🔒" para testar rotas protegidas
