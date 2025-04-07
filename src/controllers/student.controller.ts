@@ -41,7 +41,7 @@ export const getStudentData = async (req: AuthRequest, res: Response) => {
 
     return res.json(student);
   } catch (err) {
-    return res.status(500).json({ error: 'Erro ao buscar estudante.' });
+    return res.status(500).json({ error: 'Student data was not found.' });
   }
 };
 
@@ -73,6 +73,6 @@ export const updateStudentData = async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ error: err.errors });
     }
 
-    return res.status(500).json({ error: 'Erro ao atualizar estudante.' });
+    return res.status(500).json({ error: 'Student data update error.' });
   }
 };
